@@ -101,4 +101,69 @@ defmodule WordTracker.Game do
   def change_team(%Team{} = team, attrs \\ %{}) do
     Team.changeset(team, attrs)
   end
+
+  alias WordTracker.Game.Result
+
+  @doc """
+  Returns the list of results.
+
+  ## Examples
+
+      iex> list_results()
+      [%Result{}, ...]
+
+  """
+  def list_results do
+    Repo.all(Result)
+  end
+
+  @doc """
+  Gets a single result.
+
+  Raises `Ecto.NoResultsError` if the Result does not exist.
+
+  ## Examples
+
+      iex> get_result!(123)
+      %Result{}
+
+      iex> get_result!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_result!(id), do: Repo.get!(Result, id)
+
+  @doc """
+  Creates a result.
+
+  ## Examples
+
+      iex> create_result(%{field: value})
+      {:ok, %Result{}}
+
+      iex> create_result(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_result(attrs \\ %{}) do
+    %Result{}
+    |> Result.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Deletes a result.
+
+  ## Examples
+
+      iex> delete_result(result)
+      {:ok, %Result{}}
+
+      iex> delete_result(result)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_result(%Result{} = result) do
+    Repo.delete(result)
+  end
 end
