@@ -89,4 +89,10 @@ defmodule WordTrackerWeb.Router do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
+
+  scope "/api", WordTrackerWeb do
+    pipe_through [:api]
+
+    post "/submit_result", ResultController, :create
+  end
 end
