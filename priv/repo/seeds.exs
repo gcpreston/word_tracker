@@ -9,3 +9,5 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+WordTracker.Repo.insert!(%WordTracker.Game.Team{name: "Dude, Where's my CHAR?"})
