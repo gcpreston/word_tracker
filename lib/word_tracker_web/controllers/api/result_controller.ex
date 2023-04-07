@@ -5,8 +5,6 @@ defmodule WordTrackerWeb.ResultController do
   alias WordTracker.Game.Result
 
   def create(conn, %{"result" => result_params}) do
-    dbg result_params
-
     with {:ok, %Result{} = result} <- Game.create_result(result_params) do
       conn
       |> put_status(:created)
