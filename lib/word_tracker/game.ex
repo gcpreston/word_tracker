@@ -8,6 +8,16 @@ defmodule WordTracker.Game do
 
   alias WordTracker.Game.Team
 
+  @topic inspect(__MODULE__)
+
+  defp topic(type) when is_atom(type) do
+    @topic <> ":#{Atom.to_string(type)}"
+  end
+
+  def subscribe(type) when is_atom(type) do
+    Phoenix.PubSub.subscribe(WordTracker.PubSub, topic(type))
+  end
+
   @doc """
   Returns the list of teams.
 
@@ -53,6 +63,7 @@ defmodule WordTracker.Game do
     %Team{}
     |> Team.changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:team, :created])
   end
 
   @doc """
@@ -71,6 +82,7 @@ defmodule WordTracker.Game do
     team
     |> Team.changeset(attrs)
     |> Repo.update()
+    |> notify_subscribers([:team, :updated])
   end
 
   @doc """
@@ -87,6 +99,7 @@ defmodule WordTracker.Game do
   """
   def delete_team(%Team{} = team) do
     Repo.delete(team)
+    |> notify_subscribers([:team, :deleted])
   end
 
   @doc """
@@ -149,6 +162,7 @@ defmodule WordTracker.Game do
     %Result{}
     |> Result.changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:result, :created])
   end
 
   @doc """
@@ -165,5 +179,18 @@ defmodule WordTracker.Game do
   """
   def delete_result(%Result{} = result) do
     Repo.delete(result)
+    |> notify_subscribers([:result, :deleted])
+  end
+
+  ## Notify subscribers
+
+  defp notify_subscribers({:ok, result}, [type, _action] = event) do
+    Phoenix.PubSub.broadcast(
+      WordTracker.PubSub,
+      topic(type),
+      {__MODULE__, event, result}
+    )
+
+    {:ok, result}
   end
 end
