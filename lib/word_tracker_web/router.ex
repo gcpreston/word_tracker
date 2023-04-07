@@ -93,6 +93,8 @@ defmodule WordTrackerWeb.Router do
   scope "/api", WordTrackerWeb do
     pipe_through [:api]
 
-    post "/submit_result", ResultController, :create
+    post "/results", ResultController, :create
+
+    get "/teams", TeamController, :index
   end
 end
