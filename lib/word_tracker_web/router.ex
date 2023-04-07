@@ -75,6 +75,8 @@ defmodule WordTrackerWeb.Router do
 
       live "/teams/:id", TeamLive.Show, :show
       live "/teams/:id/show/edit", TeamLive.Show, :edit
+
+      live "/results", ResultLive.Index, :index
     end
   end
 
